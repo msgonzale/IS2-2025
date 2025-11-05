@@ -6,12 +6,13 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import co.edu.uco.ucochallenge.secondary.adapters.repository.entity.DepartmentEntity;
+
+import co.edu.uco.ucochallenge.secondary.adapters.repository.entity.StateEntity;
 
 @Repository
-public interface DepartmentRepository extends JpaRepository<DepartmentEntity, UUID> {
+public interface StateRepository extends JpaRepository<StateEntity, UUID> {
     
-    List<DepartmentEntity> findByCountryId(UUID countryId);
+    List<StateEntity> findByCountryId(UUID countryId);
 }
 
 

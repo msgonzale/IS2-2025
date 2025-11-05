@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CityRepository extends JpaRepository<CityEntity, UUID> {
-    List<CityEntity> findByDepartmentId(UUID departmentId);
+    List<CityEntity> findByState_Id(UUID stateId);
 }

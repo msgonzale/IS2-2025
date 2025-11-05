@@ -1,80 +1,84 @@
 package co.edu.uco.ucochallenge.primary.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import co.edu.uco.ucochallenge.secondary.ports.repository.CityRepository;
-import co.edu.uco.ucochallenge.secondary.ports.repository.CountryRepository;
-import co.edu.uco.ucochallenge.secondary.ports.repository.DepartmentRepository;
-import co.edu.uco.ucochallenge.secondary.ports.repository.IdTypeRepository;
+import co.edu.uco.ucochallenge.secondary.ports.repository.*;
+
 
 @RestController
 @RequestMapping("/uco-challenge/api/v1/catalog")
 public class CatalogController {
 
     private final CountryRepository countryRepo;
-    private final DepartmentRepository deptRepo;
+    private final StateRepository stateRepo;
     private final CityRepository cityRepo;
     private final IdTypeRepository idTypeRepo;
 
-
     public CatalogController(
             CountryRepository countryRepo,
-            DepartmentRepository deptRepo,
+            StateRepository stateRepo,
             CityRepository cityRepo,
             IdTypeRepository idTypeRepo) {
         this.countryRepo = countryRepo;
-        this.deptRepo = deptRepo;
+        this.stateRepo = stateRepo;
         this.cityRepo = cityRepo;
         this.idTypeRepo = idTypeRepo;
     }
 
- 
+    // -------------------------
+    // 📍 Listar países
+    // -------------------------
     @GetMapping("/countries")
-    public List<Map<String,Object>> getCountries() {
+    public List<Map<String, Object>> getCountries() {
         return countryRepo.findAll().stream()
-                .map(c -> Map.of(
-                        "id", c.getId(),
-                        "name", c.getName()
-                ))
+                .map(country -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", country.getId());
+                    map.put("name", country.getName());
+                    return map;
+                })
                 .collect(Collectors.toList());
     }
 
 
-    @GetMapping("/departments")
-    public List<Map<String, Object>> getDepartments(@RequestParam UUID countryId) {
-        return deptRepo.findByCountryId(countryId).stream()
-                .map(d -> Map.of(
-                        "id", d.getId(),
-                        "name", d.getName()
-                ))
+    @GetMapping("/states")
+    public List<Map<String, Object>> getStates(@RequestParam UUID countryId) {
+        return stateRepo.findByCountryId(countryId).stream()
+                .map(state -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", state.getId());
+                    map.put("name", state.getName()); 
+                    return map;
+                })
                 .collect(Collectors.toList());
     }
+
 
     @GetMapping("/cities")
-    public List<Map<String, Object>> getCities(@RequestParam UUID departmentId) {
-        return cityRepo.findByDepartmentId(departmentId).stream()
-                .map(ci -> Map.of(
-                        "id", ci.getId(),
-                        "name", ci.getName()
-                ))
+    public List<Map<String, Object>> getCities(@RequestParam UUID stateId) {
+        return cityRepo.findByState_Id(stateId).stream()
+                .map(city -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", city.getId());
+                    map.put("name", city.getName());
+                    return map;
+                })
                 .collect(Collectors.toList());
     }
 
+ 
     @GetMapping("/id-types")
     public List<Map<String, Object>> getIdTypes() {
         return idTypeRepo.findAll().stream()
-                .map(t -> Map.of(
-                        "id", t.getId(),
-                        "name", t.getName()
-                ))
+                .map(idType -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", idType.getId());
+                    map.put("name", idType.getName());
+                    return map;
+                })
                 .collect(Collectors.toList());
     }
 }

@@ -2,8 +2,6 @@ package co.edu.uco.ucochallenge.secondary.adapters.repository.entity;
 
 import java.util.UUID;
 
-import co.edu.uco.ucochallenge.crosscuting.helper.TextHelper;
-import co.edu.uco.ucochallenge.crosscuting.helper.UUIDHelper;
 
 import java.util.List;
 import jakarta.persistence.*;
@@ -19,12 +17,12 @@ public class CountryEntity {
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<DepartmentEntity> departamentos;
+    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<StateEntity> states;
+
 
     public CountryEntity() {
-    	   this.id = UUIDHelper.getDefault();
-           this.nombre = TextHelper.getDefault();
+
     }
 
     public CountryEntity(UUID id, String nombre) {
@@ -38,22 +36,22 @@ public class CountryEntity {
     }
 
     public void setId(UUID id) {
-        this.id = UUIDHelper.getDefault(id);
+        this.id = id;
     }
 
-    public String getNombre() {
+    public String getName() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = TextHelper.getDefaultWithTrim(nombre);
+    public void setName(String nombre) {
+        this.nombre = nombre;
     }
 
-    public List<DepartmentEntity> getDepartamentos() {
-        return departamentos;
+    public List<StateEntity> getStates() {
+        return states;
     }
 
-    public void setDepartamentos(List<DepartmentEntity> departamentos) {
-        this.departamentos = departamentos;
+    public void setStates(List<StateEntity> states) {
+        this.states = states;
     }
 }
